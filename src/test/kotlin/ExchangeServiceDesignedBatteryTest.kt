@@ -21,28 +21,52 @@ class ExchangeServiceDesignedBatteryTest : DescribeSpec({
         clearAllMocks()
     }
 
-    describe("battery designed from equivalence classes for ExchangeService") {
-
-        describe("input validation") {
+    describe("A. Validación de entrada") { // Tests del 1 al 4
+        it("Debe lanzar excepción si la cantidad es 0"){
             val provider = mockk<ExchangeRateProvider>()
             val service = ExchangeService(provider)
 
-            it("throws an exception when the amount is zero") {
-                shouldThrow<IllegalArgumentException> {
-                    service.exchange(Money(0, "USD"), "EUR")
-                }
-            }
-
-            it("throws an exception when the amount is negative") {
-            }
-
-            it("throws an exception when the source currency code is invalid") {
-            }
-
-            it("throws an exception when the target currency code is invalid") {
-
+            shouldThrow<IllegalArgumentException> {
+                service.exchange(Money(0, "USD"), "EUR")
             }
         }
 
-       //..
-}})
+        it("Debe lanzar excepción si la cantidad es negativa."){
+            val provider = mockk<ExchangeRateProvider>()
+            val service = ExchangeService(provider)
+
+            shouldThrow<IllegalArgumentException>{
+                service.exchange(Money(-4,"EUR"),"USD")
+            }
+        }
+
+        it("Debe lanzar excepción si la moneda origen no tiene 3 letras."){
+            val provider = mockk<ExchangeRateProvider>()
+            val service = ExchangeService(provider)
+
+            shouldThrow<IllegalArgumentException>{
+                service.exchange(Money(5,"EURO"),"USD")
+            }
+        }
+
+        it("Debe lanzar excepción si la moneda destino no tiene 3 letras."){
+            val provider = mockk<ExchangeRateProvider>()
+            val service = ExchangeService(provider)
+
+            shouldThrow<IllegalArgumentException>{
+                service.exchange(Money(5,"EUR"),"DOLAR")
+            }
+        }
+    }
+
+    describe("B. Relación entre moneda origen y destino") { // Test 5
+
+    }
+
+    describe("C. Estrategia de búsqueda de tasas") { // Tests del 6 al 11
+
+    }
+
+
+
+}
