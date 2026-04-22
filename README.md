@@ -508,6 +508,8 @@ https://github.com/IES-Rafael-Alberti/2526-u5-5-3-exchangeservice-ifonlob/blob/0
 
 * ejecución de tests
 
+![img_1.png](img_1.png)
+
 
 #### 🔹 4) CE h) Se han documentado las incidencias detectadas
 
