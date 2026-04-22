@@ -1,4 +1,9 @@
+[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/Og7iRJ-r)
 # Mock, Stub o Spy en Kotlin
+
+Antes de empezar, recuerda que el objetivo es realizar la práctica aqui enlazada:
+- [pŕactica](#ejercicio-propuesto)
+- [preguntas](#preguntas)
 
 Este proyecto usa `Kotest` y `MockK` para probar un servicio de cambio de divisas. Antes de escribir pruebas, conviene tener clara la diferencia entre tres dobles de prueba muy habituales: `stub`, `spy` y `mock`.
 
@@ -259,9 +264,9 @@ Empieza siempre por el doble más simple que permita expresar bien la prueba:
 
 Eso suele producir tests más claros, más mantenibles y menos frágiles.
 
-## Ejercicio Propuesto: Batería de Pruebas para `ExchangeService`
+## Ejercicio Propuesto
 
-El ejercicio consiste en diseñar una batería de pruebas desde cero, a partir de la especificación del servicio y aplicando clases de equivalencia y selección consciente de dobles de prueba.
+El ejercicio consiste en diseñar una batería de pruebas para `ExchangeService` desde cero, a partir de la especificación del servicio y aplicando clases de equivalencia y selección consciente de dobles de prueba.
 
 siguiendo el estilo de `DescribeSpec` de `Kotest` y usando `MockK` para los dobles.
 
@@ -373,11 +378,197 @@ Implementa una batería con al menos los siguientes tests:
 
 El alumnado debe implementar una batería de pruebas propia para `ExchangeService`. Puedes usar las clases de equivalencia y casos propuestos como guía, o puedes diseñar tus propias clases de equivalencia y casos partiendo de los que ya hay. Lo importante es que la batería cubra aspectos relevantes (Clses de equivalencias) del servicio y que el uso de `stub`, `spy` y `mock` esté justificado por el caso concreto.
 
+El alumnado debe responder a las preguntas de mas abajo-.
+
 La solución debe:
 
 - justificar implícitamente el uso de `stub`, `spy` y `mock`
 - cubrir las clases de equivalencia anterioresv o tuyas
 - verificar tanto resultados como interacciones cuando corresponda
+
+## Preguntas
+
+Te dejo una batería de **preguntas de reflexión/evaluación** directamente alineadas con el ejercicio.
+
+Las preguntas están formuladas para que **mires tu propio código**, justifiques decisiones y, muy importante, **dejes enlaces permanentes (permalinks) al repositorio** como evidencia evaluable.
+
+
+### Preguntas de evaluación sobre la batería de pruebas
+
+> 📌 **Instrucción común para todas las preguntas:**
+> En cada respuesta debes incluir **enlaces permanentes (permalinks) al código** donde se evidencie lo que explicas (tests concretos, configuraciones, uso de mocks, etc.).
+
+
+#### 🔹 1) CE b) Se han definido casos de prueba
+
+
+Identifica **al menos 3 casos de prueba de tu batería** y explica:
+
+* Qué **clase de equivalencia** cubre cada uno (válida o inválida).
+* Qué **condición concreta del servicio** estás validando (validación, tasa directa, conversión cruzada, etc.).
+* Por qué ese caso es representativo dentro del conjunto de pruebas.
+
+Incluye enlaces a los tests correspondientes.
+
+**Pregunta:**
+
+**Primer caso de prueba**: "Debe lanzar excepción si la cantidad es negativa."
+
+- **Clase de equivalencia**: Inválida (cantidad < 0).
+
+- **Condición validada**: Validación de los parámetros de entrada antes de operar.
+
+- **Por qué es representativo**: Es representativo porque valida que el sistema intercepte datos financieros sin sentido antes de iniciar ninguna consulta de tasas que consuma recursos.
+
+https://github.com/IES-Rafael-Alberti/2526-u5-5-3-exchangeservice-ifonlob/blob/0c9214ebf16fb49e3068a86ea1bcc1fa220562ee/src/test/kotlin/ExchangeServiceDesignedBatteryTest.kt#L34-L42
+
+**Segundo caso de prueba**: "Debe convertir correctamente usando una tasa directa con stub."
+
+- **Clase de equivalencia**: Válida (monedas origen y destino diferentes, con ruta de conversión directa existente).
+
+- **Condición validada**: Conversión directa estándar (sin problemas).
+
+- **Por qué es representativo**: Es el flujo principal y más frecuente de la aplicación. Prueba que la fórmula matemática (cantidad * tasa) se aplica correctamente cuando los datos son correctos.
+
+https://github.com/IES-Rafael-Alberti/2526-u5-5-3-exchangeservice-ifonlob/blob/0c9214ebf16fb49e3068a86ea1bcc1fa220562ee/src/test/kotlin/ExchangeServiceDesignedBatteryTest.kt#L74-L85
+
+**Tercer caso de prueba**: "Debe intentar una segunda ruta intermedia si la primera falla usando mock."
+
+- **Clase de equivalencia**: Válida (monedas distintas, sin ruta directa, requiere cruce pero existen varias opciones y algunas fallan).
+
+- **Condición validada**: Estrategia de conversión cruzada entre divisas.
+
+- **Por qué es representativo**: Es representativo de un escenario complejo donde no existe una conversión directa y se tienen que usar conversiones cruzadas entre divisas.
+
+https://github.com/IES-Rafael-Alberti/2526-u5-5-3-exchangeservice-ifonlob/blob/0c9214ebf16fb49e3068a86ea1bcc1fa220562ee/src/test/kotlin/ExchangeServiceDesignedBatteryTest.kt#L108-L122
+
+- #### 🔹 2) CE f) Se han efectuado pruebas unitarias de clases y funciones
+
+
+Selecciona uno de tus tests y explica cómo se trata de una **prueba unitaria real sobre `ExchangeService`**:
+
+* Qué método estás probando exactamente.
+* Cómo has aislado la lógica de la clase respecto a sus dependencias.
+* Qué entrada proporcionas y qué salida verificas.
+
+Justifica por qué este test cumple con el concepto de prueba unitaria según el módulo 
+
+Incluye enlace al test.
+
+https://github.com/IES-Rafael-Alberti/2526-u5-5-3-exchangeservice-ifonlob/blob/0c9214ebf16fb49e3068a86ea1bcc1fa220562ee/src/test/kotlin/ExchangeServiceDesignedBatteryTest.kt#L75-L85
+
+**Pregunta:**
+
+**Análisis del test "Debe convertir correctamente usando una tasa directa con stub"**:
+
+- Método que se prueba: `ExchangeService.exchange(money: Money, targetCurrency: String).`
+
+He utilizado la librería MockK para generar un doble de prueba fijo (stub) 
+
+https://github.com/IES-Rafael-Alberti/2526-u5-5-3-exchangeservice-ifonlob/blob/0c9214ebf16fb49e3068a86ea1bcc1fa220562ee/src/test/kotlin/ExchangeServiceDesignedBatteryTest.kt#L76
+
+, ya que al definir un comportamiento fijo 
+`(every { provider.rate("USDEUR") } returns 0.92)`, aseguramos que si el test falla, es 100% por culpa del cálculo interno de ExchangeService, 
+y no porque el proveedor de tasas externo se haya caído.
+
+https://github.com/IES-Rafael-Alberti/2526-u5-5-3-exchangeservice-ifonlob/blob/0c9214ebf16fb49e3068a86ea1bcc1fa220562ee/src/test/kotlin/ExchangeServiceDesignedBatteryTest.kt#L81
+
+- Entrada y salida:
+
+**Entrada**: Money(100, "USD") como moneda base y "EUR" como destino.
+
+**Salida**: Se espera un valor de 92L (100 * 0.92).
+
+
+#### 🔹 3) CE g) Se han implementado pruebas automáticas
+
+
+Explica cómo se ejecuta tu batería de pruebas de forma automática:
+
+* Qué herramienta utilizas (Kotest, Gradle, etc.).
+
+He utilizado Gradle, ya que me ha permitido automatizar junto con Kotest las pruebas automáticas.
+
+* Cómo se lanzan todas las pruebas sin intervención manual.
+
+Gracias al comando `./gradlew test` el framework escanea automáticamente el proyecto buscando clases que extiendan de DescribeSpec,
+ejecutando posteriormente cada bloque `it` de forma secuencial.
+
+* Qué evidencia tienes de que los tests verifican automáticamente el comportamiento del sistema (por ejemplo: assertions, fallos, etc.).
+
+Gracias al uso de aserciones como `resultado shouldBe 92L` o `shouldThrow<IllegalArgumentException> { ... }`,
+resultado de la función coincide con el esperado, la prueba se marca en verde (Pasa), aunque en el caso contario,
+Kotest detiene la prueba y levanta un reporte de error marcando el fallo en rojo automáticamente.
+
+Incluye enlace a:
+
+* configuración (build.gradle.kts o similar)
+
+https://github.com/IES-Rafael-Alberti/2526-u5-5-3-exchangeservice-ifonlob/blob/0c9214ebf16fb49e3068a86ea1bcc1fa220562ee/build.gradle.kts
+
+* ejecución de tests
+
+![img_1.png](img_1.png)
+
+
+#### 🔹 4) CE h) Se han documentado las incidencias detectadas
+
+**Pregunta:**
+
+Durante el desarrollo de la batería de pruebas, identifica **al menos una incidencia o comportamiento inesperado** que hayas detectado:
+
+* Qué test la detectó.
+
+https://github.com/IES-Rafael-Alberti/2526-u5-5-3-exchangeservice-ifonlob/blob/0c9214ebf16fb49e3068a86ea1bcc1fa220562ee/src/test/kotlin/ExchangeServiceDesignedBatteryTest.kt#L62-L72
+
+* Qué comportamiento incorrecto observaste.
+
+A la hora de ejecutar los tests observé que el valor de la variable cantidad era de 1500L cuando
+realmente para pasar el test tendría que ser igual a la cantidad de moneda ya que la conversión es 1:1.
+
+* Cómo lo solucionaste (o cómo debería solucionarse).
+
+Realmente fue un despiste a la hora del desarrollo, por lo que con tan solo cambiar el valor de la variable `cantidad` 
+se solucionó todo.
+
+
+Incluye enlace al test implicado.
+
+![img.png](img.png)
+
+
+#### 🔹 5) CE i) Se han utilizado dobles de prueba para aislar los componentes durante las pruebas
+
+**Pregunta:**
+
+Analiza el uso de dobles de prueba en tu batería y explica:
+
+* Un caso donde hayas usado **stub**, otro con **mock** y otro con **spy**.
+* Qué objetivo tiene cada uno en ese test concreto.
+* Qué problema tendrías si usaras directamente `InMemoryExchangeRateProvider` en todos los casos.
+
+**Análisis del uso de dobles (Stub, Mock y Spy):**
+
+- Uso de Stub: En el test "Debe convertir correctamente usando una tasa directa con stub", utilizo mockk() para devolver una tasa dija de 0.92,
+con el objetivo de simplemente alimentar a la función con un dato predecible para probar la multiplicación, ya que realmente no me interesa cuántas veces se llama.
+
+https://github.com/IES-Rafael-Alberti/2526-u5-5-3-exchangeservice-ifonlob/blob/0c9214ebf16fb49e3068a86ea1bcc1fa220562ee/src/test/kotlin/ExchangeServiceDesignedBatteryTest.kt#L75-L85
+
+- Uso de Mock: En "Debe verificar el orden exacto de las llamadas... usando mock", utilizo mockk() pero de forma avanzada con verifySequence,
+con el fin de no solo preprogramar los fallos y aciertos de las rutas intermedias, sino asegurar estrictamente la lógica de control interna, verificando en qué orden el servicio intentó explorar el set de monedas.
+
+https://github.com/IES-Rafael-Alberti/2526-u5-5-3-exchangeservice-ifonlob/blob/0c9214ebf16fb49e3068a86ea1bcc1fa220562ee/src/test/kotlin/ExchangeServiceDesignedBatteryTest.kt#L95-L107
+
+- Uso de Spy: En "Debe usar spy sobre InMemoryExchangeRateProvider...", he envuelto una instancia real del proveedor en memoria con spyk(),
+con el objetivo de aprovechar el funcionamiento real del proveedor, pero añadiendo la capacidad de espiar (con verify(exactly=0)) que, 
+efectivamente, la aplicación no ha lanzado ninguna consulta innecesaria a base de datos cuando la moneda origen y destino son idénticas.
+
+https://github.com/IES-Rafael-Alberti/2526-u5-5-3-exchangeservice-ifonlob/blob/0c9214ebf16fb49e3068a86ea1bcc1fa220562ee/src/test/kotlin/ExchangeServiceDesignedBatteryTest.kt#L86-L94
+
+**¿Qué problema habría si usamos InMemoryExchangeRateProvider en todos los casos?**
+
+Habría un alto acoplamiento, puesto que si quisiéramos probar qué pasa cuando una ruta da error, tendríamos que estar manipulando la clase real interna para que genere IllegalArgumentException adrede.
+Además, si el proveedor en memoria tuviera un bug , las pruebas del ExchangeService fallarían, dándonos un falso negativo: creeríamos que nuestro servicio está roto, cuando en realidad lo que falla es una dependencia externa.
 
 
 ## Fuente conceptual
