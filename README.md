@@ -444,7 +444,6 @@ https://github.com/IES-Rafael-Alberti/2526-u5-5-3-exchangeservice-ifonlob/blob/0
 
 - #### 🔹 2) CE f) Se han efectuado pruebas unitarias de clases y funciones
 
-**Pregunta:**
 
 Selecciona uno de tus tests y explica cómo se trata de una **prueba unitaria real sobre `ExchangeService`**:
 
@@ -456,20 +455,57 @@ Justifica por qué este test cumple con el concepto de prueba unitaria según el
 
 Incluye enlace al test.
 
+https://github.com/IES-Rafael-Alberti/2526-u5-5-3-exchangeservice-ifonlob/blob/0c9214ebf16fb49e3068a86ea1bcc1fa220562ee/src/test/kotlin/ExchangeServiceDesignedBatteryTest.kt#L75-L85
+
+**Pregunta:**
+
+**Análisis del test "Debe convertir correctamente usando una tasa directa con stub"**:
+
+- Método que se prueba: `ExchangeService.exchange(money: Money, targetCurrency: String).`
+
+He utilizado la librería MockK para generar un doble de prueba fijo (stub) 
+
+https://github.com/IES-Rafael-Alberti/2526-u5-5-3-exchangeservice-ifonlob/blob/0c9214ebf16fb49e3068a86ea1bcc1fa220562ee/src/test/kotlin/ExchangeServiceDesignedBatteryTest.kt#L76
+
+, ya que al definir un comportamiento fijo 
+`(every { provider.rate("USDEUR") } returns 0.92)`, aseguramos que si el test falla, es 100% por culpa del cálculo interno de ExchangeService, 
+y no porque el proveedor de tasas externo se haya caído.
+
+https://github.com/IES-Rafael-Alberti/2526-u5-5-3-exchangeservice-ifonlob/blob/0c9214ebf16fb49e3068a86ea1bcc1fa220562ee/src/test/kotlin/ExchangeServiceDesignedBatteryTest.kt#L81
+
+- Entrada y salida:
+
+**Entrada**: Money(100, "USD") como moneda base y "EUR" como destino.
+
+**Salida**: Se espera un valor de 92L (100 * 0.92).
+
 
 #### 🔹 3) CE g) Se han implementado pruebas automáticas
 
-**Pregunta:**
 
 Explica cómo se ejecuta tu batería de pruebas de forma automática:
 
 * Qué herramienta utilizas (Kotest, Gradle, etc.).
+
+He utilizado Gradle, ya que me ha permitido automatizar junto con Kotest las pruebas automáticas.
+
 * Cómo se lanzan todas las pruebas sin intervención manual.
+
+Gracias al comando `./gradlew test` el framework escanea automáticamente el proyecto buscando clases que extiendan de DescribeSpec,
+ejecutando posteriormente cada bloque `it` de forma secuencial.
+
 * Qué evidencia tienes de que los tests verifican automáticamente el comportamiento del sistema (por ejemplo: assertions, fallos, etc.).
+
+Gracias al uso de aserciones como `resultado shouldBe 92L` o `shouldThrow<IllegalArgumentException> { ... }`,
+resultado de la función coincide con el esperado, la prueba se marca en verde (Pasa), aunque en el caso contario,
+Kotest detiene la prueba y levanta un reporte de error marcando el fallo en rojo automáticamente.
 
 Incluye enlace a:
 
 * configuración (build.gradle.kts o similar)
+
+https://github.com/IES-Rafael-Alberti/2526-u5-5-3-exchangeservice-ifonlob/blob/0c9214ebf16fb49e3068a86ea1bcc1fa220562ee/build.gradle.kts
+
 * ejecución de tests
 
 
@@ -480,12 +516,24 @@ Incluye enlace a:
 Durante el desarrollo de la batería de pruebas, identifica **al menos una incidencia o comportamiento inesperado** que hayas detectado:
 
 * Qué test la detectó.
+
+https://github.com/IES-Rafael-Alberti/2526-u5-5-3-exchangeservice-ifonlob/blob/0c9214ebf16fb49e3068a86ea1bcc1fa220562ee/src/test/kotlin/ExchangeServiceDesignedBatteryTest.kt#L62-L72
+
 * Qué comportamiento incorrecto observaste.
+
+A la hora de ejecutar los tests observé que el valor de la variable cantidad era de 1500L cuando
+realmente para pasar el test tendría que ser igual a la cantidad de moneda ya que la conversión es 1:1.
+
 * Cómo lo solucionaste (o cómo debería solucionarse).
+
+Realmente fue un despiste a la hora del desarrollo, por lo que con tan solo cambiar el valor de la variable `cantidad` 
+se solucionó todo.
 
 Relaciona esto con la importancia de documentar incidencias en el proceso de pruebas 
 
 Incluye enlace al test implicado.
+
+
 
 
 #### 🔹 5) CE i) Se han utilizado dobles de prueba para aislar los componentes durante las pruebas
