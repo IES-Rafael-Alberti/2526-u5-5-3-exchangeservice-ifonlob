@@ -115,12 +115,12 @@ class ExchangeServiceDesignedBatteryTest : DescribeSpec({
             every { provider.rate("GBPUSD") } throws IllegalArgumentException()
             every { provider.rate("USDJPY") } throws IllegalArgumentException()
 
-            every { provider.rate("GBPEUR") } returns 1.15
+            every { provider.rate("GBPEUR") } returns 1.5
             every { provider.rate("EURJPY") } returns 160.0
 
             val resultado = service.exchange(Money(100, "GBP"), "JPY")
 
-            resultado shouldBe 18400L
+            resultado shouldBe 24000L
         }
 
         it("Debe lanzar excepción si no existe ninguna ruta válida."){
