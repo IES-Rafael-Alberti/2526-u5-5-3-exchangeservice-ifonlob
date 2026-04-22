@@ -401,7 +401,6 @@ Las preguntas están formuladas para que **mires tu propio código**, justifique
 
 #### 🔹 1) CE b) Se han definido casos de prueba
 
-**Pregunta:**
 
 Identifica **al menos 3 casos de prueba de tu batería** y explica:
 
@@ -411,8 +410,39 @@ Identifica **al menos 3 casos de prueba de tu batería** y explica:
 
 Incluye enlaces a los tests correspondientes.
 
+**Pregunta:**
 
-#### 🔹 2) CE f) Se han efectuado pruebas unitarias de clases y funciones
+**Primer caso de prueba**: "Debe lanzar excepción si la cantidad es negativa."
+
+- **Clase de equivalencia**: Inválida (cantidad < 0).
+
+- **Condición validada**: Validación de los parámetros de entrada antes de operar.
+
+- **Por qué es representativo**: Es representativo porque valida que el sistema intercepte datos financieros sin sentido antes de iniciar ninguna consulta de tasas que consuma recursos.
+
+https://github.com/IES-Rafael-Alberti/2526-u5-5-3-exchangeservice-ifonlob/blob/0c9214ebf16fb49e3068a86ea1bcc1fa220562ee/src/test/kotlin/ExchangeServiceDesignedBatteryTest.kt#L34-L42
+
+**Segundo caso de prueba**: "Debe convertir correctamente usando una tasa directa con stub."
+
+- **Clase de equivalencia**: Válida (monedas origen y destino diferentes, con ruta de conversión directa existente).
+
+- **Condición validada**: Conversión directa estándar (sin problemas).
+
+- **Por qué es representativo**: Es el flujo principal y más frecuente de la aplicación. Prueba que la fórmula matemática (cantidad * tasa) se aplica correctamente cuando los datos son correctos.
+
+https://github.com/IES-Rafael-Alberti/2526-u5-5-3-exchangeservice-ifonlob/blob/0c9214ebf16fb49e3068a86ea1bcc1fa220562ee/src/test/kotlin/ExchangeServiceDesignedBatteryTest.kt#L74-L85
+
+**Tercer caso de prueba**: "Debe intentar una segunda ruta intermedia si la primera falla usando mock."
+
+- **Clase de equivalencia**: Válida (monedas distintas, sin ruta directa, requiere cruce pero existen varias opciones y algunas fallan).
+
+- **Condición validada**: Estrategia de conversión cruzada entre divisas.
+
+- **Por qué es representativo**: Es representativo de un escenario complejo donde no existe una conversión directa y se tienen que usar conversiones cruzadas entre divisas.
+
+https://github.com/IES-Rafael-Alberti/2526-u5-5-3-exchangeservice-ifonlob/blob/0c9214ebf16fb49e3068a86ea1bcc1fa220562ee/src/test/kotlin/ExchangeServiceDesignedBatteryTest.kt#L108-L122
+
+- #### 🔹 2) CE f) Se han efectuado pruebas unitarias de clases y funciones
 
 **Pregunta:**
 
