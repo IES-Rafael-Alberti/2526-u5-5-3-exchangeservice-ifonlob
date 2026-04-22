@@ -529,10 +529,10 @@ realmente para pasar el test tendría que ser igual a la cantidad de moneda ya q
 Realmente fue un despiste a la hora del desarrollo, por lo que con tan solo cambiar el valor de la variable `cantidad` 
 se solucionó todo.
 
-Relaciona esto con la importancia de documentar incidencias en el proceso de pruebas 
 
 Incluye enlace al test implicado.
 
+![img.png](img.png)
 
 
 
