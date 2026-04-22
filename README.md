@@ -535,7 +535,6 @@ Incluye enlace al test implicado.
 ![img.png](img.png)
 
 
-
 #### 🔹 5) CE i) Se han utilizado dobles de prueba para aislar los componentes durante las pruebas
 
 **Pregunta:**
@@ -546,9 +545,28 @@ Analiza el uso de dobles de prueba en tu batería y explica:
 * Qué objetivo tiene cada uno en ese test concreto.
 * Qué problema tendrías si usaras directamente `InMemoryExchangeRateProvider` en todos los casos.
 
-Relaciona tu explicación con la necesidad de reducir el acoplamiento en pruebas unitarias 
+**Análisis del uso de dobles (Stub, Mock y Spy):**
 
-Incluye enlaces a los tests donde se utilicen.
+- Uso de Stub: En el test "Debe convertir correctamente usando una tasa directa con stub", utilizo mockk() para devolver una tasa dija de 0.92,
+con el objetivo de simplemente alimentar a la función con un dato predecible para probar la multiplicación, ya que realmente no me interesa cuántas veces se llama.
+
+https://github.com/IES-Rafael-Alberti/2526-u5-5-3-exchangeservice-ifonlob/blob/0c9214ebf16fb49e3068a86ea1bcc1fa220562ee/src/test/kotlin/ExchangeServiceDesignedBatteryTest.kt#L75-L85
+
+- Uso de Mock: En "Debe verificar el orden exacto de las llamadas... usando mock", utilizo mockk() pero de forma avanzada con verifySequence,
+con el fin de no solo preprogramar los fallos y aciertos de las rutas intermedias, sino asegurar estrictamente la lógica de control interna, verificando en qué orden el servicio intentó explorar el set de monedas.
+
+https://github.com/IES-Rafael-Alberti/2526-u5-5-3-exchangeservice-ifonlob/blob/0c9214ebf16fb49e3068a86ea1bcc1fa220562ee/src/test/kotlin/ExchangeServiceDesignedBatteryTest.kt#L95-L107
+
+- Uso de Spy: En "Debe usar spy sobre InMemoryExchangeRateProvider...", he envuelto una instancia real del proveedor en memoria con spyk(),
+con el objetivo de aprovechar el funcionamiento real del proveedor, pero añadiendo la capacidad de espiar (con verify(exactly=0)) que, 
+efectivamente, la aplicación no ha lanzado ninguna consulta innecesaria a base de datos cuando la moneda origen y destino son idénticas.
+
+https://github.com/IES-Rafael-Alberti/2526-u5-5-3-exchangeservice-ifonlob/blob/0c9214ebf16fb49e3068a86ea1bcc1fa220562ee/src/test/kotlin/ExchangeServiceDesignedBatteryTest.kt#L86-L94
+
+**¿Qué problema habría si usamos InMemoryExchangeRateProvider en todos los casos?**
+
+Habría un alto acoplamiento, puesto que si quisiéramos probar qué pasa cuando una ruta da error, tendríamos que estar manipulando la clase real interna para que genere IllegalArgumentException adrede.
+Además, si el proveedor en memoria tuviera un bug , las pruebas del ExchangeService fallarían, dándonos un falso negativo: creeríamos que nuestro servicio está roto, cuando en realidad lo que falla es una dependencia externa.
 
 
 ## Fuente conceptual
