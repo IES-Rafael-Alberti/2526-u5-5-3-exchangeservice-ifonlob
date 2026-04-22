@@ -64,7 +64,7 @@ class ExchangeServiceDesignedBatteryTest : DescribeSpec({
             val provider = mockk<ExchangeRateProvider>()
             val service = ExchangeService(provider)
 
-            val cantidad = 1500L
+            val cantidad = 10L
             val resultado = service.exchange(Money(10, "EUR"), "EUR")
 
             resultado shouldBe cantidad
