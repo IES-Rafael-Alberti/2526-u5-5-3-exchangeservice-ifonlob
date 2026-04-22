@@ -84,7 +84,9 @@ class ExchangeServiceDesignedBatteryTest : DescribeSpec({
         }
 
         it("Debe usar spy sobre InMemoryExchangeRateProvider para verificar una llamada real correcta.") {
-            val providerSpy = spyk<InMemoryExchangeRateProvider>()
+
+            val realProvider = InMemoryExchangeRateProvider(mapOf("USDEUR" to 0.92))
+            val providerSpy = spyk<InMemoryExchangeRateProvider>(realProvider)
             val service = ExchangeService(providerSpy)
 
             service.exchange(Money(200, "EUR"), "EUR")
@@ -100,9 +102,9 @@ class ExchangeServiceDesignedBatteryTest : DescribeSpec({
             every{provider.rate("EURUSD")} returns 1.2
             every{provider.rate("USDJPY")} returns 158.0
 
-            val resultado = service.exchange(Money(1,"EUR"),"JPY")
+            val resultado = service.exchange(Money(10,"EUR"),"JPY")
 
-            resultado shouldBe 189.6
+            resultado shouldBe 1896L
         }
 
         it("Debe intentar una segunda ruta intermedia si la primera falla usando mock") {
@@ -111,6 +113,7 @@ class ExchangeServiceDesignedBatteryTest : DescribeSpec({
 
             every { provider.rate("GBPJPY") } throws IllegalArgumentException()
             every { provider.rate("GBPUSD") } throws IllegalArgumentException()
+            every { provider.rate("USDJPY") } throws IllegalArgumentException()
 
             every { provider.rate("GBPEUR") } returns 1.15
             every { provider.rate("EURJPY") } returns 160.0
